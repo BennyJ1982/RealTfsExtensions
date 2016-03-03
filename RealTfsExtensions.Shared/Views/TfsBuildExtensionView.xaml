@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="RealTfsExtensions.Shared.Views.TfsBuildExtensionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:RealTfsExtensions.Shared.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources/Common.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid Margin="2">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="20" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Rectangle Grid.Row="1" Grid.RowSpan="6" Fill="LightGray"></Rectangle>
+		<Rectangle Grid.Row="1" Grid.RowSpan="6" Grid.ColumnSpan="2" Stroke="DarkGray"></Rectangle>
+
+		<StackPanel Grid.ColumnSpan="2" Margin="0,0,0,4" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" Orientation="Horizontal">
+			<views:BusyIndicator Width="20" Height="20" />
+			<TextBlock FontWeight="Bold" ForceCursor="True">Loading...</TextBlock>
+		</StackPanel>
+
+		<TextBlock Grid.Row="1" Text="Owner" />
+		<ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" DisplayMemberPath="DisplayName"/>
+
+		<TextBlock Grid.Row="2" Text="Shelveset to check in" />
+		<DockPanel Grid.Column="1" Grid.Row="2">
+			<Button Width="22" Height="22" Margin="4,0,0,0" Padding="0" DockPanel.Dock="Left" Command="{Binding RefreshOwnedShelvesets}">
+				<Image Width="16" Height="16">
+					<Image.Source>
+						<BitmapImage UriSource="/RealTfsExtensions.Shared;component/Resources/refresh.png"></BitmapImage>
+					</Image.Source>
+				</Image>
+			</Button>
+			<ComboBox DockPanel.Dock="Right" ItemsSource="{Binding OwnedShelvesets}" SelectedItem="{Binding SelectedShelveset, Mode=TwoWay}" DisplayMemberPath="DisplayName"/>
+		</DockPanel>
+		
+
+		<TextBlock Grid.Row="4" Text="Build definition" />
+		<ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding BuildDefinitions}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedBuildDefinition, Mode=TwoWay}"></ComboBox>
+
+		<TextBlock Grid.Row="5" Text="Check in as" />
+		<ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUserToCheckInFor, Mode=TwoWay}" DisplayMemberPath="DisplayName"/>
+
+		<Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right"  Command="{Binding QueueBuild}">Queue new Build...</Button>
+	</Grid>
+</UserControl>

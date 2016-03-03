@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="RealTfsExtensions.Shared.Views.UsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:RealTfsExtensions.Shared.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources/Common.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<DataTemplate x:Key="UserTemplate">
+				<StackPanel Orientation="Horizontal">
+					<Image Width="16" Height="16" Source="pack://application:,,,/RealTfsExtensions.Shared;component/resources/user1.png"/>
+					<TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+				</StackPanel>
+			</DataTemplate>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="2">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"></RowDefinition>
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.ColumnSpan="2" Margin="0,0,0,4" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" Orientation="Horizontal">
+			<views:BusyIndicator Width="20" Height="20" />
+			<TextBlock FontWeight="Bold" ForceCursor="True">Loading...</TextBlock>
+		</StackPanel>
+
+		<ListView Grid.Row="1" BorderBrush="{x:Null}"
+				  ItemsSource="{Binding Users}" 
+				  SelectedItem="{Binding SelectedUser, Mode=TwoWay}" 
+				  ItemTemplate="{StaticResource UserTemplate}">
+
+		</ListView>
+
+		<Button Grid.Row="2" Command="{Binding ViewPendingChanges}" >View Pending Changes</Button>
+	</Grid>
+</UserControl>
